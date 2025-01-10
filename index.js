@@ -10,6 +10,12 @@ let roomCounter = 0;
 const roomMatcher = new RegExp(/^[0-9]{1,19}$/);
 const TARGET_ROOM_SIZE = 2;
 
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "clownfish-app-gft3y.ondigitalocean.app");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
+
 const io = require('socket.io')(server);
 io.on('connection', socket => {
 
