@@ -52,10 +52,12 @@ function roomToJoin() {
 
 function getRoomList() {
   let allRooms = io.sockets.adapter.rooms;
-  let keys = allRooms.keys().filter(key => key.match(roomMatcher));
+  // let keys = allRooms.keys().filter(key => key.match(roomMatcher));
   let rooms = {};
-  keys.forEach(key => {
-    rooms[key] = allRooms.get(key)
+  allRooms.keys().forEach(key => {
+    if (key.match(roomMatcher)) {
+      rooms[key] = allRooms.get(key)
+    }
   })
   return rooms;
 }
