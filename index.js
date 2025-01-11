@@ -25,13 +25,10 @@ io.on('connection', socket => {
   socket.emit('established');
 
   socket.on('move', data => {
-    console.log(data);
     io.to(room).emit('player-move', data);
   });
 
   socket.on('disconnect', () => {
-    // console.log(room + ' had a lost connection');
-    // io.to(room).emit('connection-lost');
     console.log(`${socket.id} was disconnected`);
   });
   
@@ -52,7 +49,7 @@ function roomToJoin() {
   let roomList = getRoomList();
   let keys = Object.keys(roomList);
   for (let i = 0; i < keys.length; i++) {
-    if (roomList[keys[i]].length < TARGET_ROOM_SIZE) {
+    if (roomList[keys[i]].size < TARGET_ROOM_SIZE) {
       return keys[i];
     }
   }
@@ -61,26 +58,28 @@ function roomToJoin() {
 
 function getRoomList() {
   let allRooms = io.sockets.adapter.rooms;
-  let keys = Object.keys(allRooms).filter(key => key.match(roomMatcher));
+  let keys = allRooms.keys().filter(key => key.match(roomMatcher));
   let rooms = {};
-  for (let i = 0; i < keys.length; i++) {
-    rooms[keys[i]] = allRooms[keys[i]];
-  }
+  keys.forEach(key => {
+    rooms[key] = allRooms.get(key)
+  })
   return rooms;
 }
 
 function checkRoomSize(room) {
-  if (io.sockets.adapter.rooms[room].length === TARGET_ROOM_SIZE) {
-    let socketsInRoom = Object.keys(io.sockets.adapter.rooms[room].sockets);
-    for (let i = 0; i < socketsInRoom.length; i++) {
-      io.sockets.connected[socketsInRoom[i]].emit('room-ready', {
+  if (io.sockets.adapter.rooms.get(room).size === TARGET_ROOM_SIZE) {
+    let socketsInRoom = io.sockets.adapter.rooms.get(room).keys();
+
+    let index = 0;
+    socketsInRoom.forEach(socket => {
+      io.to(socket).emit('room-ready', {
         socketIDs: socketsInRoom,
-        idInRoom: i,
+        idInRoom: index,
         gameStartTime: Date.now() + 6000,
       });
-    }
-    console.log(room + ' is full');
-    console.log(io.sockets.adapter.rooms[room]);
+      index++;
+    })
+    console.log(`room is full ${room}`)
   }
 }
 
