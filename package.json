@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "Fi Graham",
+  "author": "Dusk Graham",
   "license": "GPL-3.0",
   "devDependencies": {
     "live-server": "^1.2.1"

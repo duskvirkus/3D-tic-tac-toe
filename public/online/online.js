@@ -30,7 +30,7 @@ function setup() {
 }
 
 function setupSocket() {
-  socket = io('http://localhost:3000');
+  socket = io('https://clownfish-app-gft3y.ondigitalocean.app:8080');
 
   socket.on('established', () => {
     updateStatus('Waiting for another player ...<br>Invite a friend or you may be here awhile.');
