@@ -30,13 +30,6 @@ function setup() {
 }
 
 function setupSocket() {
-  // socket = io('localhost:8080', //{
-  // //   withCredentials: true,
-  // //   extraHeaders: {
-  // //     "my-custom-header": "abcd"
-  // //   }
-  // // }
-  // );
   socket = io('https://clownfish-app-j9vdu.ondigitalocean.app')
 
   socket.on('established', () => {
