@@ -74,6 +74,8 @@ function getRoomList() {
   // let keys = allRooms.keys().filter(key => key.match(roomMatcher));
   let rooms = {};
   if (allRooms) {
+    console.log(allRooms)
+    console.log(`all rooms type ${typeof(allRooms)}`)
     allRooms.keys().forEach(key => {
       if (key.match(roomMatcher)) {
         rooms[key] = allRooms.get(key)
