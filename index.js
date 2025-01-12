@@ -10,15 +10,6 @@ let roomCounter = 0;
 const roomMatcher = new RegExp(/^[0-9]{1,19}$/);
 const TARGET_ROOM_SIZE = 2;
 
-<<<<<<< HEAD
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "clownfish-app-gft3y.ondigitalocean.app");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
-
-const io = require('socket.io')(server);
-=======
 const io = require('socket.io')(server//, {
   // allowRequest: (req, cb) => {
   //   console.log("hello")
@@ -31,7 +22,7 @@ const io = require('socket.io')(server//, {
   // }
 // }
 );
->>>>>>> parent of 5335140 (cleanup)
+
 io.on('connection', socket => {
 
   console.log(`${socket.id} is connected`);
@@ -80,23 +71,12 @@ function roomToJoin() {
 
 function getRoomList() {
   let allRooms = io.sockets.adapter.rooms;
-<<<<<<< HEAD
   // let keys = allRooms.keys().filter(key => key.match(roomMatcher));
   let rooms = {};
   allRooms.keys().forEach(key => {
     if (key.match(roomMatcher)) {
       rooms[key] = allRooms.get(key)
     }
-=======
-  console.log(allRooms.keys())
-  // console.log(Object.keys(allRooms))
-  let keys = allRooms.keys().filter(key => key.match(roomMatcher));
-  console.log(`keys ${keys}`);
-  let rooms = {};
-  keys.forEach(key => {
-    console.log(key)
-    rooms[key] = allRooms.get(key)
->>>>>>> parent of 5335140 (cleanup)
   })
   // for (let key : keys) {
   //   console.log(key);
