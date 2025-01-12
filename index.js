@@ -73,11 +73,15 @@ function getRoomList() {
   let allRooms = io.sockets.adapter.rooms;
   // let keys = allRooms.keys().filter(key => key.match(roomMatcher));
   let rooms = {};
-  allRooms.keys().forEach(key => {
-    if (key.match(roomMatcher)) {
-      rooms[key] = allRooms.get(key)
-    }
-  })
+  if (allRooms) {
+    allRooms.keys().forEach(key => {
+      if (key.match(roomMatcher)) {
+        rooms[key] = allRooms.get(key)
+      }
+    })
+  } else {
+    console.log("allRooms is empty")
+  }
   // for (let key : keys) {
   //   console.log(key);
   // }
@@ -85,7 +89,7 @@ function getRoomList() {
   //   console.log(`${i} ${keys[i]}`)
   //   rooms[keys[i]] = allRooms.get(keys[i]);
   // }
-  console.log(rooms)
+  console.log(`rooms ${rooms}`)
   return rooms;
 }
 function checkRoomSize(room) {
