@@ -10,7 +10,6 @@ let roomCounter = 0;
 const roomMatcher = new RegExp(/^[0-9]{1,19}$/);
 const TARGET_ROOM_SIZE = 2;
 
-
 const io = require('socket.io')(server//, {
   // allowRequest: (req, cb) => {
   //   console.log("hello")
@@ -23,6 +22,7 @@ const io = require('socket.io')(server//, {
   // }
 // }
 );
+
 io.on('connection', socket => {
 
   console.log(`${socket.id} is connected`);
