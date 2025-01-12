@@ -10,18 +10,7 @@ let roomCounter = 0;
 const roomMatcher = new RegExp(/^[0-9]{1,19}$/);
 const TARGET_ROOM_SIZE = 2;
 
-const io = require('socket.io')(server//, {
-  // allowRequest: (req, cb) => {
-  //   console.log("hello")
-  //   console.log(req.headers)
-  //   if (req.headers.host === "localhost:8080") {
-  //     cb(null, true);
-  //   }
-  //   // const isAllowed = req.headers.origin === 'http://good.com';
-  //   cb(null, false);
-  // }
-// }
-);
+const io = require('socket.io')(server);
 
 io.on('connection', socket => {
 
@@ -37,8 +26,6 @@ io.on('connection', socket => {
   });
 
   socket.on('disconnect', () => {
-    // console.log(room + ' had a lost connection');
-    // io.to(room).emit('connection-lost');
     console.log(`${socket.id} was disconnected`);
   });
   
@@ -57,11 +44,8 @@ function joinRoom(socket) {
 
 function roomToJoin() {
   let roomList = getRoomList();
-  console.log(`room list ${roomList}`)
   let keys = Object.keys(roomList);
-  console.log(`room list keys ${keys}`)
   for (let i = 0; i < keys.length; i++) {
-    console.log(`roomList[keys[i]] ${roomList[keys[i]]}`)
     if (roomList[keys[i]].size < TARGET_ROOM_SIZE) {
       return keys[i];
     }
@@ -71,7 +55,6 @@ function roomToJoin() {
 
 function getRoomList() {
   let allRooms = io.sockets.adapter.rooms;
-  // let keys = allRooms.keys().filter(key => key.match(roomMatcher));
   let rooms = {};
   if (allRooms) {
     console.log(allRooms)
@@ -84,14 +67,6 @@ function getRoomList() {
   } else {
     console.log("allRooms is empty")
   }
-  // for (let key : keys) {
-  //   console.log(key);
-  // }
-  // for (let i = 0; i < keys.length; i++) {
-  //   console.log(`${i} ${keys[i]}`)
-  //   rooms[keys[i]] = allRooms.get(keys[i]);
-  // }
-  console.log(`rooms ${rooms}`)
   return rooms;
 }
 function checkRoomSize(room) {
@@ -102,7 +77,6 @@ function checkRoomSize(room) {
 
     let index = 0;
     socketsInRoom.forEach(socket => {
-      // console.log(`sockets connected ${io.sockets.connected.get(socket)}`)
       io.to(socket).emit('room-ready', {
         socketIDs: socketsInRoom,
         idInRoom: index,
@@ -110,28 +84,6 @@ function checkRoomSize(room) {
       });
       index++;
     })
-
-    // console.log(socketsInRoom)
-    // console.log()
-
-    // for (let i = 0; i < socketsInRoom.length; ++i) {
-    //   payload = {
-    //     socketIDs: socketsInRoom,
-    //     idInRoom: i,
-    //     gameStartTime: Date.now() + 6000,
-    //   };
-    //   console.log(payload)
-    //   io.to(socket).emit('room-ready', payload);
-    // }
-    // console.log(`socketsInRoom ${socketsInRoom}`)
-    // for (let i = 0; i < socketsInRoom.length; i++) {
-    //   console.log(`socketInRoom[${i}] ${socketsInRoom[i]}`)
-    //   io.sockets.connected[socketsInRoom[i]].emit('room-ready', {
-    //     socketIDs: socketsInRoom,
-    //     idInRoom: i,
-    //     gameStartTime: Date.now() + 6000,
-    //   });
-    // }
     console.log(room + ' is full');
     console.log(io.sockets.adapter.rooms.get(room));
   }
